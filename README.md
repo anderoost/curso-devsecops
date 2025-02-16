@@ -1,2 +1,4 @@
-# curso-devsecops
-Curso DevSecOps
+# Curso DevSecOps
+
+Autores:
+- anderoost
