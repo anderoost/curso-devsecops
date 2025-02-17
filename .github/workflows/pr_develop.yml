@@ -6,8 +6,11 @@ on:
       - main
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+
 jobs:
-  dependabot:
+  sca:
     runs-on: ubuntu-latest
     steps:
       - name: Clona repositorio
@@ -23,14 +26,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Ejecuta Dependabot
-        uses: dependabot/dependabot-core@v1
+      - name: Dependency review
+        uses: actions/dependency-review-action@v4
         with:
-          package-manager: 'pip'
-          directory: '/'
-          open-pull-requests-limit: 10
+          fail-on-severity: 'high'
 
-  codeql:
+  sast:
     runs-on: ubuntu-latest
     steps:
       - name: Clona repositorio
@@ -46,7 +47,7 @@ jobs:
 
   pruebas-qa:
     runs-on: ubuntu-latest
-    needs: [dependabot, codeql]
+    needs: [sca, sast]
     steps:
       - name: Clona repositorio
         uses: actions/checkout@v3
